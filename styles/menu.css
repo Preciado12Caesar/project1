@@ -1,0 +1,231 @@
+/* Estilos para el menú con mejoras de UX */
+#listaCategoriasDinamicas,
+#listaCategoriasDinamicas ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Menú principal - contenedor (más grande) */
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 15px;  /* Padding mayor */
+    min-width: 250px; /* Ancho mínimo mayor */
+    z-index: 1000;
+}
+
+/* Elementos del nivel 1 - FILA VERTICAL */
+.menu-nivel1 {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-nivel1 > li {
+    width: 100%;
+    position: relative;
+    margin-bottom: 8px; /* Más espacio entre elementos */
+}
+
+.menu-nivel1 > li > a {
+    display: block;
+    padding: 10px 18px; /* Padding mayor */
+    background-color: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px; /* Texto más grande */
+}
+
+.menu-nivel1 > li > a:hover {
+    background-color: #e9ecef;
+}
+
+/* ZONA TOLERANTE: MANTENER MENÚS ABIERTOS */
+.mega-menu li.has-children {
+    position: relative;
+}
+
+/* Crear una zona invisible para mantener el hover activo */
+.mega-menu li.has-children > a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -20px; /* Zona invisible extendida hacia la derecha */
+    width: 20px;  /* Ancho de la zona */
+    height: 100%;
+    background-color: transparent;
+}
+
+/* Submenús niveles 2-5 - horizontales (con mejoras) */
+.menu-nivel2,
+.menu-nivel3,
+.menu-nivel4,
+.menu-nivel5 {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 230px;  /* Más ancho */
+    border-radius: 4px;
+    padding: 10px;     /* Más padding */
+    transition: opacity 0.15s ease;
+    /* Crear zona de tolerancia para mover el mouse */
+    margin-left: -5px; /* Superponer ligeramente */
+    padding-left: 15px; /* Compensar la superposición */
+}
+
+/* Mostrar submenús al hacer hover */
+.has-children:hover > ul {
+    display: block;
+}
+
+/* Estilos para los elementos dentro de los submenús */
+.menu-nivel2 a,
+.menu-nivel3 a,
+.menu-nivel4 a,
+.menu-nivel5 a {
+    display: block;
+    padding: 10px 18px; /* Padding mayor */
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 4px;
+    font-size: 15px; /* Texto más grande */
+}
+
+.menu-nivel2 a:hover,
+.menu-nivel3 a:hover,
+.menu-nivel4 a:hover,
+.menu-nivel5 a:hover {
+    background-color: #f5f5f5;
+}
+
+/* Indicador de submenú más visible */
+.has-children > a::after {
+    content: "›";
+    position: absolute;
+    right: 15px; /* Más lejos del borde */
+    font-size: 20px; /* Más grande */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Bordes de color para los diferentes tipos */
+.bg-productos {
+    border-left: 4px solid #0d6efd; /* Más grueso */
+}
+
+.bg-servicios {
+    border-left: 4px solid #28a745;
+}
+
+.bg-cuchillas {
+    border-left: 4px solid #dc3545;
+}
+
+.bg-tren-rodamiento {
+    border-left: 4px solid #fd7e14;
+}
+
+/* Íconos de PDF */
+.fa-file-pdf {
+    color: #dc3545;
+    margin-left: 5px;
+    font-size: 16px; /* Más grande */
+}
+
+/* BOTÓN DE CATÁLOGO */
+#productosDropdown {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* MEJORAS PARA MÓVIL */
+@media (max-width: 992px) {
+    /* Hacer que el menú se muestre como modal en móvil */
+    .mega-menu {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 350px;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 8px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+    }
+    
+    /* Oscurecer el fondo cuando se muestra el menú */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+    }
+    
+    .overlay.active {
+        display: block;
+    }
+    
+    /* Cambiar posición de submenús en móvil */
+    .menu-nivel2,
+    .menu-nivel3,
+    .menu-nivel4,
+    .menu-nivel5 {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        margin-left: 0;
+        padding-left: 15px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+    
+    /* Deshabilitar hover en móvil */
+    .has-children:hover > ul {
+        display: none;
+    }
+    
+    /* Mostrar solo los submenús de elementos activos */
+    .has-children.active > ul {
+        display: block;
+    }
+    
+    /* Cambiar flecha para móvil */
+    .has-children > a::after {
+        content: "+";
+    }
+    
+    .has-children.active > a::after {
+        content: "-";
+    }
+    
+    /* Botón de cerrar para móvil */
+    .close-mobile-menu {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        color: #333;
+        cursor: pointer;
+    }
+}

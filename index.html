@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Maquinaria</title>
+    <link rel="stylesheet" href="styles/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="recursos/LOGO.svg">
+    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- HEADER CON LOGO Y NAVBAR -->
+    <header class="site-header">
+        <div class="container">
+            <!-- Logo a la izquierda -->
+            <div class="logo-container">
+                <img src="recursos/LOGO.png" alt="Logo" height="60">
+            </div>
+            
+            <div class="navbar-container">
+                <!-- PRODUCTOS a la izquierda -->
+               <!-- Ajuste para el botón de productos -->
+<!-- ESTO ES LO QUE DEBE ESTAR EN TU HTML -->
+<!-- Reemplaza esta parte en tu HTML -->
+<!-- Estructura HTML mejorada para el menú -->
+<div class="productos-wrapper">
+    <a href="#" class="btn btn-primary dropdown-toggle" id="productosDropdown">
+      CATALOGO<i class="fas fa-caret-down"></i>
+    </a>
+    
+    <div class="mega-menu-container">
+        <!-- El mega menú que se mostrará al hacer hover/click -->
+        <div class="mega-menu">
+             
+            <ul class="menu-nivel1" id="listaCategoriasDinamicas">
+                <!-- El contenido del menú se cargará dinámicamente con JavaScript -->
+            </ul>
+        </div>
+    </div>
+</div>
+                
+                <!-- Menú principal a la derecha -->
+                <div class="main-menu-wrapper">
+                    <div class="main-menu">
+                        <a href="#inicio" class="nav-item">INICIO</a>
+                        <a href="#nosotros" class="nav-item">NOSOTROS</a>
+                        <a href="#servicios" class="nav-item">SERVICIOS</a>
+                        <a href="#galeria" class="nav-item">GALERÍA</a>
+                        <a href="#contacto" class="nav-item">CONTACTO</a>
+                    </div>
+                </div>
+                
+                <!-- Botón para menú móvil -->
+                <button class="mobile-menu-button" aria-label="Menú">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECCIÓN INICIO -->
+    <section id="inicio" class="hero-section">
+        <div class="carousel-container">
+            <div id="carouselHero" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="recursos/Carrusel1.png" class="d-block w-100" alt="Imagen 1">
+                        <div class="carousel-caption">
+                            <h2>IMÁGENES REFERENCIALES A MAQUINARIA</h2>
+                            <p>SE DESPLAZA CADA 4 SEGUNDOS - INCLUYE FLECHAS A LOS LADOS</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="recursos/carrusel2.png" class="d-block w-100" alt="Imagen 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="recursos/carrusel3.png" class="d-block w-100" alt="Imagen 3">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselHero" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselHero" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+                
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselHero" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#carouselHero" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#carouselHero" data-bs-slide-to="2"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Div invisible para JavaScript -->
+        <div id="contenido-principal" style="display: none;"></div>
+    </section>
+
+    <!-- SECCIÓN NOSOTROS -->
+    <section id="nosotros" class="section-with-bg">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">NOSOTROS</h2>
+            </div>
+            <div class="nosotros-content">
+                <div class="info-column">
+                    <div class="texto-informativo">
+                        <div class="filosofia-item">
+                            <h4>Filosofía</h4>
+                            <p>Nuestra organización mantiene los siguientes valores como pilares fundamentales para el Desarrollo de sus actividades:</p>
+                            <ul>
+                                <li><strong>Integridad:</strong> Actuamos con honestidad, ética, transparencia y coherencia dentro y fuera de nuestra organización.</li>
+                                <li><strong>Colaboración:</strong> Estamos convecidos que la cooperación asegura el logro de los objetivos organizacionales de manera eficiente y eficaz.</li>
+                                <li><strong>Compromiso con el cliente:</strong> Nuestra prioridad es construir relaciones sólidas y duraderas con los clientes, basadas en la confianza, la satisfacción y la lealtad.</li>
+                            </ul>
+                        </div>
+                        <div class="filosofia-item">
+                            <h4>Misión</h4>
+                            <p>Lograr que las empresas del rubro de movimiento de tierras accedan a productos y servicios con una excelente valoración calidad-precio y soporte post-venta necesarios.</p>
+                        </div>
+                        <div class="filosofia-item">
+                            <h4>Visión</h4>
+                            <p>Crear un entorno laboral que inspire a los colaboradores a alcanzar los objetivos organizacionales, asegurando que las necesidades y espectativas de los consumidores sean cubiertas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="historia-column">
+                    <div class="carrusel-historia">
+                        <div id="carouselHistoria" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="historia-content">
+                                        <h4>CARRUSEL CON FOTOS</h4>
+                                        <p>DE HISTORIA DE LA EMPRESA</p>
+                                        <p>FOTOS DEL JEFE Y MAS</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="historia-content">
+                                        <h4>NUESTRO EQUIPO</h4>
+                                        <p>Información sobre el equipo directivo y los profesionales que forman parte de la empresa.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselHistoria" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselHistoria" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN SERVICIOS -->
+    <section id="servicios">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">SERVICIOS</h2>
+            </div>
+            <div class="servicios-grid">
+                <!-- Primera fila de servicios -->
+                <div class="servicio-card">
+                    <div class="servicio-circle">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h4>PRODUCTO</h4>
+                    <div class="servicio-descripcion">
+                        <p>BREVE DESCRIPCIÓN</p>
+                    </div>
+                </div>
+                
+                <div class="servicio-card">
+                    <div class="servicio-circle">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>PRODUCTO</h4>
+                    <div class="servicio-descripcion">
+                        <p>BREVE DESCRIPCIÓN</p>
+                    </div>
+                </div>
+                
+                <div class="servicio-card">
+                    <div class="servicio-circle">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h4>PRODUCTO</h4>
+                    <div class="servicio-descripcion">
+                        <p>BREVE DESCRIPCIÓN</p>
+                    </div>
+                </div>
+
+                <!-- Segunda fila de servicios -->
+                <div class="servicio-card">
+                    <div class="servicio-circle">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h4>PRODUCTO</h4>
+                    <div class="servicio-descripcion">
+                        <p>BREVE DESCRIPCIÓN</p>
+                    </div>
+                </div>
+                
+                <div class="servicio-card">
+                    <div class="servicio-circle">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <h4>PRODUCTO</h4>
+                    <div class="servicio-descripcion">
+                        <p>BREVE DESCRIPCIÓN</p>
+                    </div>
+                </div>
+                
+                <div class="servicio-card">
+                    <div class="servicio-circle">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h4>PRODUCTO</h4>
+                    <div class="servicio-descripcion">
+                        <p>BREVE DESCRIPCIÓN</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN GALERÍA -->
+    <section id="galeria" class="section-with-bg">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">GALERÍA</h2>
+            </div>
+            <div class="galeria-grid">
+                <div class="galeria-item large">
+                    <img src="recursos/galeria-placeholder.jpg" alt="Imagen 1">
+                </div>
+                <div class="galeria-item tall">
+                    <img src="recursos/galeria-placeholder.jpg" alt="Imagen 2">
+                </div>
+                <div class="galeria-item">
+                    <img src="recursos/galeria-placeholder.jpg" alt="Imagen 3">
+                </div>
+                <div class="galeria-item">
+                    <img src="recursos/galeria-placeholder.jpg" alt="Imagen 4">
+                </div>
+                <div class="galeria-item">
+                    <img src="recursos/galeria-placeholder.jpg" alt="Imagen 5">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN CONTACTO -->
+    <section id="contacto">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">CONTACTO</h2>
+            </div>
+            <div class="contacto-content">
+                <div class="contacto-info">
+                    <h4>Información de contacto</h4>
+                    <p><strong>Dirección:</strong> AV. VALLE HERMOSO MZA. A LOTE. 17 APV. VALLE HERMOSO (AV LAS CUMBRES - PARQUE VALLE HERMOSO) LIMA - LIMA – CHACLACAYO</p>
+                    <p><strong>Teléfonos:</strong> 991408540 - 977148480</p>
+                    <p><strong>Email:</strong> ventas@rgtp.com.pe</p>
+                    <p><strong>Horario:</strong> 9 a.m. a 5 p.m.</p>
+                </div>
+                
+                <div class="social-container">
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                    <p class="text-center">(al dar click a signo de la red social, te manda al perfil de la empresa)</p>
+                </div>
+            </div>
+            
+            <!-- Mapa de Google -->
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.3903576131394!2d-76.7832!3d-12.0233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDAxJzIzLjUiUyA3NsKwNDcnMDAuMCJX!5e0!3m2!1ses!2spe!4v1710375468174!5m2!1ses!2spe" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <p>variación de logo</p>
+                </div>
+                <div class="footer-info">
+                    <p>&copy; 2025 Catálogo de Maquinaria. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/jquery-3.7.1.min.js"></script>
+    <script src="scripts/menu.js"></script>
+    <script src="scripts/js/bootstrap.min.js"></script>
+    <script>
+        // Navegación suave al hacer clic en los enlaces del menú
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Si es un enlace del menú desplegable, no hacer nada
+                if (this.classList.contains('dropdown-toggle') || 
+                    this.closest('.mega-menu') !== null) {
+                    return;
+                }
+                
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Si estamos en móvil, cerrar el menú después de hacer clic
+                if (window.innerWidth < 992) {
+                    document.querySelector('.main-menu').classList.remove('active');
+                }
+            });
+        });
+        
+        // Toggle para menú móvil
+        document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+            document.querySelector('.main-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

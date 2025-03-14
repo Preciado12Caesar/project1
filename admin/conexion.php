@@ -1,7 +1,7 @@
 <?php
 // Configuración de conexión a la base de datos
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'catalogo');
+define('DB_NAME', 'maquinaria_catalogo');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
