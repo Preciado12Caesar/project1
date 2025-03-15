@@ -1,141 +1,119 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Configuración
-    const API_URL = '/api/menu-data.php';
+    // Variables de configuración
+    const CONFIG = {
+        API_URL: window.location.hostname === 'localhost' 
+            ? 'http://localhost/menu-data.php' 
+            : '/menu-data.php',
+        TIMEOUT: 10000,
+        LOADING_DELAY: 300
+    };
     
-    // Elementos del DOM
-    const catalogoButton = document.querySelector('#productosDropdown');
-    const megaMenu = document.querySelector('.mega-menu');
-    
-    // 1. Configuración inicial para móvil (crear overlay y botón cerrar)
-    function setupMobileElements() {
-        // Crear overlay para fondo
-        if (!document.querySelector('.overlay')) {
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            document.body.appendChild(overlay);
-            
-            // Cerrar el menú al hacer clic en el overlay
-            overlay.addEventListener('click', function() {
-                closeMobileMenu();
-            });
-        }
+    // Elemento para mostrar mensajes de error
+    const crearMensajeError = (mensaje) => {
+        console.error(mensaje);
+    };
+
+    // Configurar eventos para el menú móvil
+    const setupMobileMenu = () => {
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mainMenu = document.querySelector('.main-menu');
         
-        // Crear botón de cerrar para móvil
-        if (window.innerWidth < 992 && !document.querySelector('.close-mobile-menu')) {
-            const closeButton = document.createElement('button');
-            closeButton.className = 'close-mobile-menu';
-            closeButton.innerHTML = '×';
-            closeButton.addEventListener('click', function() {
-                closeMobileMenu();
+        if (mobileMenuButton && mainMenu) {
+            mobileMenuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mainMenu.classList.toggle('active');
             });
             
-            if (megaMenu) {
-                megaMenu.appendChild(closeButton);
-            }
-        }
-    }
-    
-    // Función para cerrar menú en móvil
-    function closeMobileMenu() {
-        if (megaMenu) megaMenu.style.display = 'none';
-        const overlay = document.querySelector('.overlay');
-        if (overlay) overlay.classList.remove('active');
-    }
-    
-    // 2. Manejo del botón de catálogo
-    if (catalogoButton && megaMenu) {
-        // Ocultar el menú inicialmente
-        megaMenu.style.display = 'none';
-        
-        // Toggle del menú al hacer clic
-        catalogoButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            if (megaMenu.style.display === 'block') {
-                closeMobileMenu();
-            } else {
-                megaMenu.style.display = 'block';
-                
-                // En móvil, activar overlay
-                if (window.innerWidth < 992) {
-                    const overlay = document.querySelector('.overlay');
-                    if (overlay) overlay.classList.add('active');
+            // Cerrar el menú al hacer clic fuera
+            document.addEventListener('click', function(event) {
+                if (!mainMenu.contains(event.target) && event.target !== mobileMenuButton) {
+                    mainMenu.classList.remove('active');
                 }
-            }
-        });
-        
-        // Si no es móvil, añadir comportamiento hover
-        if (window.innerWidth >= 992) {
-            const productosWrapper = document.querySelector('.productos-wrapper');
-            
-            if (productosWrapper) {
-                // Retrasar el cierre para dar tiempo a navegar
-                let timeoutId;
-                
-                productosWrapper.addEventListener('mouseenter', function() {
-                    clearTimeout(timeoutId);
-                    megaMenu.style.display = 'block';
-                });
-                
-                productosWrapper.addEventListener('mouseleave', function() {
-                    // Retrasar el cierre para permitir mover el mouse al submenú
-                    timeoutId = setTimeout(function() {
-                        if (!document.querySelector('.mega-menu:hover')) {
-                            megaMenu.style.display = 'none';
-                        }
-                    }, 300); // 300ms de retraso
-                });
-                
-                // Si el mouse vuelve al menú, cancelar el cierre
-                megaMenu.addEventListener('mouseenter', function() {
-                    clearTimeout(timeoutId);
-                });
-                
-                megaMenu.addEventListener('mouseleave', function() {
-                    timeoutId = setTimeout(function() {
-                        megaMenu.style.display = 'none';
-                    }, 300);
-                });
-            }
+            });
         }
-        
-        // Cerrar el menú al hacer clic fuera (solo en desktop)
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth >= 992 && megaMenu.style.display === 'block' && 
-                !megaMenu.contains(e.target) && e.target !== catalogoButton) {
-                megaMenu.style.display = 'none';
-            }
-        });
-    }
-    
-    // 3. Cargar datos del menú
-    function cargarMenu() {
-        fetch(API_URL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
+    };
+
+    // Configuración de navegación suave
+    const setupSmoothScrolling = () => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                // Si es un enlace del menú desplegable, no hacer nada
+                if (this.classList.contains('dropdown-toggle') || 
+                    this.closest('.mega-menu') !== null) {
+                    return;
                 }
-                return response.json();
-            })
-            .then(data => {
+                
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Si estamos en móvil, cerrar el menú después de hacer clic
+                    if (window.innerWidth < 992) {
+                        document.querySelector('.main-menu').classList.remove('active');
+                    }
+                }
+            });
+        });
+    };
+
+    // Cargar el menú desde la API
+    const cargarMenu = () => {
+        const startTime = Date.now();
+        
+        // Crear controller para poder abortar la petición si tarda demasiado
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+        
+        fetch(CONFIG.API_URL, { 
+            signal: controller.signal,
+            headers: {
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache'
+            } 
+        })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`Error en el servidor: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const elapsed = Date.now() - startTime;
+            // Garantizamos un tiempo mínimo de carga para evitar parpadeos
+            const remainingDelay = Math.max(0, CONFIG.LOADING_DELAY - elapsed);
+            
+            setTimeout(() => {
                 construirMenu(data);
-                configurarEventosMenu();
-                setupMobileElements(); // Configurar elementos para móvil
-            })
-            .catch(error => {
-                console.error('Error al cargar el menú:', error);
-                // Mostrar mensaje de error al usuario
-                const menuContainer = document.getElementById('listaCategoriasDinamicas');
-                if (menuContainer) {
-                    menuContainer.innerHTML = '<li><a href="#">Error al cargar el menú</a></li>';
-                }
-            });
-    }
-    
-    // 4. Construir el menú con los datos recibidos
+                configurarEventos();
+            }, remainingDelay);
+        })
+        .catch(error => {
+            clearTimeout(timeoutId);
+            console.error('Error al cargar el menú:', error);
+            
+            let mensaje = 'Ha ocurrido un error al cargar el catálogo.';
+            if (error.name === 'AbortError') {
+                mensaje = 'La conexión ha tardado demasiado. Por favor, verifique su conexión a internet e intente nuevamente.';
+            } else if (error.message.includes('NetworkError')) {
+                mensaje = 'No se pudo conectar con el servidor. Por favor, compruebe su conexión a internet.';
+            }
+            
+            crearMensajeError(mensaje);
+        });
+    };
+
+    // Función para construir el menú dinámicamente
     function construirMenu(menuData) {
         if (!menuData || !Array.isArray(menuData) || menuData.length === 0) {
             console.error('Datos del menú inválidos:', menuData);
+            crearMensajeError('Los datos del catálogo no son válidos. Contacte al administrador.');
             return;
         }
         
@@ -145,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        menuContainer.innerHTML = '';
+        menuContainer.innerHTML = ''; // Limpiar el contenedor
         
         menuData.forEach(categoria => {
             // Crear elemento de categoría (Nivel 1)
@@ -208,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 // Añadir ícono de PDF
                                 const pdfIcon = document.createElement('i');
                                 pdfIcon.className = 'fas fa-file-pdf ms-2';
+                                pdfIcon.style.color = '#ff0000';
                                 aTipo.appendChild(pdfIcon);
                             }
                             
@@ -233,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         // Añadir ícono de PDF
                                         const pdfIcon = document.createElement('i');
                                         pdfIcon.className = 'fas fa-file-pdf ms-2';
+                                        pdfIcon.style.color = '#ff0000';
                                         aMarca.appendChild(pdfIcon);
                                     }
                                     
@@ -259,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 // Añadir ícono de PDF
                                                 const pdfIcon = document.createElement('i');
                                                 pdfIcon.className = 'fas fa-file-pdf ms-2';
+                                                pdfIcon.style.color = '#ff0000';
                                                 aProducto.appendChild(pdfIcon);
                                             }
                                             
@@ -279,10 +260,49 @@ document.addEventListener('DOMContentLoaded', function() {
                                 
                                 liTipo.appendChild(ulMarcas);
                             } else {
-                                // Si no tiene marcas, hacer que el tipo sea clickeable directamente
-                                aTipo.className = 'item-link';
-                                aTipo.setAttribute('data-item', tipo.id);
-                                aTipo.setAttribute('data-type', 'tipo');
+                                // Si no tiene marcas ni series, pero tiene PDF, hacerlo clickeable directamente
+                                if (tipo.pdf_ruta || tipo.productos) {
+                                    aTipo.className = 'item-link';
+                                    aTipo.setAttribute('data-item', tipo.id);
+                                    aTipo.setAttribute('data-type', 'tipo');
+                                    
+                                    // Si tiene productos directamente asociados (sin marca)
+                                    if (tipo.productos && tipo.productos.length > 0) {
+                                        const ulProductos = document.createElement('ul');
+                                        ulProductos.className = `menu-nivel4 ${subcategoriaCSS}`;
+                                        
+                                        tipo.productos.forEach(producto => {
+                                            const liProducto = document.createElement('li');
+                                            
+                                            const aProducto = document.createElement('a');
+                                            aProducto.href = '#';
+                                            aProducto.className = 'item-link';
+                                            aProducto.setAttribute('data-item', producto.id);
+                                            aProducto.setAttribute('data-type', 'producto');
+                                            aProducto.textContent = producto.nombre || 'Sin nombre';
+                                            
+                                            // Agregar indicador de PDF si existe
+                                            if (producto.pdf_ruta) {
+                                                aProducto.setAttribute('data-pdf', producto.pdf_ruta);
+                                                // Añadir ícono de PDF
+                                                const pdfIcon = document.createElement('i');
+                                                pdfIcon.className = 'fas fa-file-pdf ms-2';
+                                                pdfIcon.style.color = '#ff0000';
+                                                aProducto.appendChild(pdfIcon);
+                                            }
+                                            
+                                            liProducto.appendChild(aProducto);
+                                            ulProductos.appendChild(liProducto);
+                                        });
+                                        
+                                        liTipo.appendChild(ulProductos);
+                                    }
+                                } else {
+                                    // Si no tiene nada, solo hacerlo clickeable
+                                    aTipo.className = 'item-link';
+                                    aTipo.setAttribute('data-item', tipo.id);
+                                    aTipo.setAttribute('data-type', 'tipo');
+                                }
                             }
                             
                             ulTipos.appendChild(liTipo);
@@ -300,85 +320,100 @@ document.addEventListener('DOMContentLoaded', function() {
             menuContainer.appendChild(liCategoria);
         });
     }
-    
-    // 5. Configurar eventos para elementos del menú
-    function configurarEventosMenu() {
-        // En móvil, manejar la expansión/contracción de submenús
-        const menuItemsWithChildren = document.querySelectorAll('.has-children > a:not(.item-link)');
+
+    // Configurar eventos para elementos del menú
+    function configurarEventos() {
+        // Agregar event listeners a todos los elementos con clase 'item-link'
+        const allLinks = document.querySelectorAll('.item-link');
         
-        menuItemsWithChildren.forEach(item => {
-            item.addEventListener('click', function(e) {
-                // En móvil, alternar visibilidad
-                if (window.innerWidth < 992) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const parent = this.parentElement;
-                    
-                    // Cerrar otros elementos al mismo nivel
-                    const siblings = parent.parentElement.children;
-                    for (let i = 0; i < siblings.length; i++) {
-                        if (siblings[i] !== parent && siblings[i].classList.contains('active')) {
-                            siblings[i].classList.remove('active');
-                        }
+        allLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const itemId = this.getAttribute('data-item');
+                const itemType = this.getAttribute('data-type');
+                const itemText = this.textContent.trim();
+                const pdfRuta = this.getAttribute('data-pdf');
+                
+                // Construir la ruta de navegación
+                let breadcrumb = '';
+                let currentElement = this;
+                let menuItems = [];
+                
+                // Navegar hacia arriba en el DOM para construir la ruta
+                while (currentElement && !currentElement.classList.contains('menu-nivel1')) {
+                    if (currentElement.tagName === 'A') {
+                        let texto = currentElement.textContent.trim();
+                        menuItems.unshift(texto);
                     }
-                    
-                    parent.classList.toggle('active');
-                } else {
-                    // En desktop, dejar que el hover maneje esto
-                    if (!this.classList.contains('item-link')) {
-                        e.preventDefault();
-                    }
+                    currentElement = currentElement.parentNode;
                 }
+                
+                breadcrumb = menuItems.join(' > ');
+                
+                // Actualizar el contenido
+                mostrarDetalle(itemId, itemType, itemText, breadcrumb, pdfRuta);
             });
         });
         
-        // Manejar clics en elementos con PDF
+        // Manejar clics en TODOS los elementos que tienen PDF
         const elementsWithPDF = document.querySelectorAll('a[data-pdf]');
         
         elementsWithPDF.forEach(link => {
+            // Asegurarnos de que el ícono de PDF sea reconocible y clickeable
+            if (!link.querySelector('.fa-file-pdf')) {
+                const pdfRuta = link.getAttribute('data-pdf');
+                if (pdfRuta) {
+                    // Añadir ícono de PDF si no existe
+                    const pdfIcon = document.createElement('i');
+                    pdfIcon.className = 'fas fa-file-pdf ms-2';
+                    pdfIcon.style.color = '#ff0000';
+                    link.appendChild(pdfIcon);
+                }
+            }
+            
+            // Evento para click en el elemento o en el ícono
             link.addEventListener('click', function(e) {
-                if (e.target.classList && e.target.classList.contains('fa-file-pdf')) {
+                // Si se hace clic en el enlace o el ícono PDF
+                const target = e.target;
+                // Si se hizo clic en el ícono o si el elemento tiene una ruta de PDF
+                if ((target.tagName === 'I' && target.classList.contains('fa-file-pdf')) || 
+                    this.hasAttribute('data-pdf')) {
                     e.preventDefault();
                     e.stopPropagation();
                     
                     const pdfRuta = this.getAttribute('data-pdf');
                     if (pdfRuta) {
-                        window.open(pdfRuta, '_blank');
+                        // Descargar el PDF
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = pdfRuta;
+                        downloadLink.download = this.textContent.trim() + '.pdf';
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
                     }
                 }
             });
         });
-        
-        // Manejar clics en elementos finales (item-link)
-        const itemLinks = document.querySelectorAll('.item-link');
-        
-        itemLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const pdfRuta = this.getAttribute('data-pdf');
-                if (pdfRuta) {
-                    // Descargar PDF
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = pdfRuta;
-                    downloadLink.download = this.textContent.trim() + '.pdf';
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                }
-                
-                // Cerrar el menú
-                closeMobileMenu();
-            });
-        });
     }
-    
-    // Iniciar la carga del menú
+
+    // Función para descargar PDF silenciosamente
+    function mostrarDetalle(itemId, itemType, itemText, breadcrumb, pdfRuta) {
+        // Si existe un PDF, descargarlo
+        if (pdfRuta) {
+            // Crear un enlace invisible y hacer clic en él para descargar
+            const downloadLink = document.createElement('a');
+            downloadLink.href = pdfRuta;
+            downloadLink.download = itemText + '.pdf';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            return;
+        }
+    }
+
+    // Inicializar funciones
+    setupMobileMenu();
+    setupSmoothScrolling();
     cargarMenu();
-    
-    // Detectar cambios en el tamaño de la ventana
-    window.addEventListener('resize', function() {
-        setupMobileElements();
-    });
 });
