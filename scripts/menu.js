@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Variables de configuración
     const CONFIG = {
-        API_URL: window.location.hostname === 'localhost' 
-            ? 'http://localhost/menu-data.php' 
-            : '/menu-data.php',
+        API_URL: 'scripts/menu-data.php',
         TIMEOUT: 10000,
         LOADING_DELAY: 300
     };
@@ -28,6 +26,50 @@ document.addEventListener('DOMContentLoaded', function() {
             document.addEventListener('click', function(event) {
                 if (!mainMenu.contains(event.target) && event.target !== mobileMenuButton) {
                     mainMenu.classList.remove('active');
+                }
+            });
+        }
+    };
+    
+    // Configurar el menú desplegable de productos con persistencia
+    const setupProductosMenu = () => {
+        const productosButton = document.querySelector('#productosDropdown');
+        const megaMenu = document.querySelector('.mega-menu');
+        
+        if (productosButton && megaMenu) {
+            let menuVisible = false;
+            
+            // Mostrar menú al hacer clic
+            productosButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (menuVisible) {
+                    megaMenu.style.display = 'none';
+                } else {
+                    megaMenu.style.display = 'block';
+                }
+                
+                menuVisible = !menuVisible;
+            });
+            
+            // También mostrar al pasar el mouse (para comodidad)
+            productosButton.addEventListener('mouseenter', function() {
+                megaMenu.style.display = 'block';
+                menuVisible = true;
+            });
+            
+            // Evitar que se cierre al entrar en el megaMenu
+            megaMenu.addEventListener('mouseenter', function() {
+                megaMenu.style.display = 'block';
+                menuVisible = true;
+            });
+            
+            // Cerrar al hacer clic en cualquier parte fuera del menú
+            document.addEventListener('click', function(e) {
+                if (!megaMenu.contains(e.target) && e.target !== productosButton) {
+                    megaMenu.style.display = 'none';
+                    menuVisible = false;
                 }
             });
         }
@@ -92,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 construirMenu(data);
                 configurarEventos();
+                setupProductosMenu(); // Configurar el menú desplegable después de construirlo
             }, remainingDelay);
         })
         .catch(error => {
@@ -353,6 +396,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Actualizar el contenido
                 mostrarDetalle(itemId, itemType, itemText, breadcrumb, pdfRuta);
+                
+                // Ocultar el megaMenu después de hacer una selección
+                const megaMenu = document.querySelector('.mega-menu');
+                if (megaMenu) {
+                    megaMenu.style.display = 'none';
+                }
             });
         });
         
@@ -384,30 +433,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     const pdfRuta = this.getAttribute('data-pdf');
                     if (pdfRuta) {
-                        // Descargar el PDF
-                        const downloadLink = document.createElement('a');
-                        downloadLink.href = pdfRuta;
-                        downloadLink.download = this.textContent.trim() + '.pdf';
-                        document.body.appendChild(downloadLink);
-                        downloadLink.click();
-                        document.body.removeChild(downloadLink);
+                        // Abrir el PDF en una nueva pestaña en lugar de descargarlo
+                        window.open(pdfRuta, '_blank');
                     }
                 }
             });
         });
     }
 
-    // Función para descargar PDF silenciosamente
+    // Función para manejar los PDFs
     function mostrarDetalle(itemId, itemType, itemText, breadcrumb, pdfRuta) {
-        // Si existe un PDF, descargarlo
+        // Si existe un PDF, abrirlo en una nueva pestaña
         if (pdfRuta) {
-            // Crear un enlace invisible y hacer clic en él para descargar
-            const downloadLink = document.createElement('a');
-            downloadLink.href = pdfRuta;
-            downloadLink.download = itemText + '.pdf';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+            window.open(pdfRuta, '_blank');
             return;
         }
     }
