@@ -21,25 +21,19 @@
             
             <div class="navbar-container">
                 <!-- PRODUCTOS a la izquierda -->
-               <!-- Ajuste para el botón de productos -->
-<!-- ESTO ES LO QUE DEBE ESTAR EN TU HTML -->
-<!-- Reemplaza esta parte en tu HTML -->
-<!-- Estructura HTML mejorada para el menú -->
-<div class="productos-wrapper">
-    <a href="#" class="btn btn-primary dropdown-toggle" id="productosDropdown">
-      CATALOGO<i class="fas fa-caret-down"></i>
-    </a>
-    
-    <div class="mega-menu-container">
-        <!-- El mega menú que se mostrará al hacer hover/click -->
-        <div class="mega-menu">
-             
-            <ul class="menu-nivel1" id="listaCategoriasDinamicas">
-                <!-- El contenido del menú se cargará dinámicamente con JavaScript -->
-            </ul>
-        </div>
-    </div>
-</div>
+                <div class="productos-wrapper">
+                    <a href="#" class="btn btn-primary dropdown-toggle" id="productosDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                      CATALOGO<i class="fas fa-caret-down"></i>
+                    </a>
+                    
+                    <div class="mega-menu-container">
+                        <div class="mega-menu dropdown-menu" aria-labelledby="productosDropdown">
+                            <ul class="menu-nivel1" id="listaCategoriasDinamicas">
+                                <!-- El contenido del menú se cargará dinámicamente con JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Menú principal a la derecha -->
                 <div class="main-menu-wrapper">
@@ -53,7 +47,7 @@
                 </div>
                 
                 <!-- Botón para menú móvil -->
-                <button class="mobile-menu-button" aria-label="Menú">
+                <button class="mobile-menu-button" type="button" aria-label="Menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
@@ -66,11 +60,8 @@
             <div id="carouselHero" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="recursos/Carrusel1.png" class="d-block w-100" alt="Imagen 1">
-                        <div class="carousel-caption">
-                            <h2>IMÁGENES REFERENCIALES A MAQUINARIA</h2>
-                            <p>SE DESPLAZA CADA 4 SEGUNDOS - INCLUYE FLECHAS A LOS LADOS</p>
-                        </div>
+                        <img src="recursos/BA.jpg" class="d-block w-100" alt="Imagen 1">
+                       
                     </div>
                     <div class="carousel-item">
                         <img src="recursos/carrusel2.png" class="d-block w-100" alt="Imagen 2">
@@ -291,55 +282,131 @@
             
             <!-- Mapa de Google -->
             <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.3903576131394!2d-76.7832!3d-12.0233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDAxJzIzLjUiUyA3NsKwNDcnMDAuMCJX!5e0!3m2!1ses!2spe!4v1710375468174!5m2!1ses!2spe" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d243.93044082219086!2d-76.78048468767213!3d-11.982316539709778!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spe!4v1742505094042!5m2!1ses!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <p>variación de logo</p>
-                </div>
-                <div class="footer-info">
-                    <p>&copy; 2025 Catálogo de Maquinaria. Todos los derechos reservados.</p>
-                </div>
+  <!-- FOOTER -->
+<footer class="main-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <p>variación de logo</p>
+            </div>
+            <div class="footer-info">
+                <a href="https://librovirtual.pe/r/RGTRACTOPARTS " class="libro-reclamaciones-link" target="_blank">
+                    <img src="recursos/libro.svg" alt="Libro de Reclamaciones" class="libro-reclamaciones-img">
+                </a>
             </div>
         </div>
-    </footer>
+        <!-- Copyright centrado -->
+        <div class="footer-copyright">
+            <p>&copy; 2025 RG TRACTO PARTS. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
 
+    <!-- SCRIPTS -->
     <script src="scripts/jquery-3.7.1.min.js"></script>
-    <script src="scripts/menu.js"></script>
+    <!-- Importante: Popper.js es necesario para los dropdowns de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="scripts/js/bootstrap.min.js"></script>
+    <script src="scripts/menu.js"></script>
+    
+    <!-- Script adicional para corregir problemas con el menú móvil -->
     <script>
-        // Navegación suave al hacer clic en los enlaces del menú
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                // Si es un enlace del menú desplegable, no hacer nada
-                if (this.classList.contains('dropdown-toggle') || 
-                    this.closest('.mega-menu') !== null) {
-                    return;
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Script de corrección cargado");
+            
+            // Configuración del botón de menú móvil
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mainMenu = document.querySelector('.main-menu');
+            
+            if (mobileMenuButton && mainMenu) {
+                console.log("Configurando botón móvil");
                 
-                e.preventDefault();
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+                // Remover eventos previos y agregar el nuevo
+                mobileMenuButton.addEventListener('click', function(event) {
+                    console.log("Click en botón móvil detectado");
+                    event.preventDefault();
+                    event.stopPropagation();
+                    mainMenu.classList.toggle('active');
                 });
-                
-                // Si estamos en móvil, cerrar el menú después de hacer clic
-                if (window.innerWidth < 992) {
-                    document.querySelector('.main-menu').classList.remove('active');
+            }
+            
+            // Manejo manual del dropdown en caso de que Bootstrap no funcione
+            const productosDropdown = document.getElementById('productosDropdown');
+            const megaMenu = document.querySelector('.mega-menu');
+            
+            if (productosDropdown && megaMenu) {
+                // Solo en móvil o si detectamos que Bootstrap no está funcionando
+                if (window.innerWidth < 992 || !window.bootstrap) {
+                    productosDropdown.addEventListener('click', function(e) {
+                        console.log("Click en CATALOGO detectado");
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Alternar la visibilidad del menú
+                        if (megaMenu.style.display === 'block') {
+                            megaMenu.style.display = 'none';
+                        } else {
+                            megaMenu.style.display = 'block';
+                        }
+                    });
+                    
+                    // Cerrar al hacer clic fuera
+                    document.addEventListener('click', function(e) {
+                        if (!megaMenu.contains(e.target) && e.target !== productosDropdown) {
+                            megaMenu.style.display = 'none';
+                        }
+                    });
                 }
-            });
-        });
-        
-        // Toggle para menú móvil
-        document.querySelector('.mobile-menu-button').addEventListener('click', function() {
-            document.querySelector('.main-menu').classList.toggle('active');
+            }
+            
+            // Inicializar Bootstrap dropdowns explícitamente
+            if (typeof bootstrap !== 'undefined') {
+                console.log("Inicializando dropdowns de Bootstrap");
+                var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
+                    return new bootstrap.Dropdown(dropdownToggleEl);
+                });
+            }
         });
     </script>
+
+    <!-- Agregar este script justo antes del cierre de </body> -->
+<script>
+    // Script para garantizar que el botón móvil funcione correctamente
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Script de corrección cargado");
+        
+        // Configuración del botón de menú móvil
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mainMenu = document.querySelector('.main-menu');
+        
+        if (mobileMenuButton && mainMenu) {
+            console.log("Configurando botón móvil desde script adicional");
+            
+            // Eliminamos cualquier evento previo para evitar duplicados
+            const oldButton = mobileMenuButton.cloneNode(true);
+            mobileMenuButton.parentNode.replaceChild(oldButton, mobileMenuButton);
+            
+            // Agregamos el nuevo evento
+            oldButton.addEventListener('click', function(event) {
+                console.log("Click en botón móvil detectado");
+                event.preventDefault();
+                event.stopPropagation();
+                mainMenu.classList.toggle('active');
+                
+                // Asegurarnos que el botón de CATALOGO permanezca visible
+                const productosDropdown = document.getElementById('productosDropdown');
+                if (productosDropdown) {
+                    productosDropdown.style.display = 'inline-flex';
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

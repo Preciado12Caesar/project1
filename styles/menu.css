@@ -1,4 +1,4 @@
-/* Estilos para el menú con mejoras de UX */
+/* menu.css*/
 #listaCategoriasDinamicas,
 #listaCategoriasDinamicas ul {
     list-style: none;
@@ -152,130 +152,234 @@
 }
 
 /* MEJORAS PARA MÓVIL */
+@media (max-width: 992px){
+
+ /* CORRECCIÓN: Botón de menú móvil - Asegurarse que sea visible y clickeable */
+ .mobile-menu-button {
+    display: block !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1010;
+    position: relative;
+}
+
+/* CORRECCIÓN: Asegurarse que el icono del botón sea visible */
+.navbar-toggler-icon {
+    display: inline-block !important;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* CORRECCIÓN: Menú principal en modo móvil */
+.main-menu {
+    display: none !important;
+    width: 100%;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* CORRECCIÓN: Cuando está activo debe mostrarse */
+.main-menu.active {
+    display: flex !important;
+}
+
+/* CORRECCIÓN: Asegurarse que los enlaces del menú principal tengan suficiente espacio */
+.main-menu .nav-item {
+    padding: 12px 15px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.main-menu .nav-item:last-child {
+    border-bottom: none;
+}
+
+/* Hacer que el menú se muestre como modal en móvil */
+.mega-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+}
+
+/* CORRECCIÓN: Asegurarse que el botón de CATALOGO sea siempre visible */
+#productosDropdown {
+    display: inline-flex !important;
+    width: auto;
+    margin-bottom: 0;
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+/* Oscurecer el fondo cuando se muestra el menú */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+/* Cambiar posición de submenús en móvil */
+.menu-nivel2,
+.menu-nivel3,
+.menu-nivel4,
+.menu-nivel5 {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    margin-left: 0;
+    padding-left: 15px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+/* Deshabilitar hover en móvil */
+.has-children:hover > ul {
+    display: none;
+}
+
+/* Mostrar solo los submenús de elementos activos */
+.has-children.active > ul {
+    display: block;
+}
+
+/* Cambiar flecha para móvil */
+.has-children > a::after {
+    content: "+";
+}
+
+.has-children.active > a::after {
+    content: "-";
+}
+
+}
+    
+
+/* Agregar estas reglas CSS al final de tu archivo menu.css */
+
+/* Corregir visualización en móvil */
 @media (max-width: 992px) {
-    /* Hacer que el menú se muestre como modal en móvil */
+    /* Asegurar que el botón de menú móvil sea visible y funcione */
+    .mobile-menu-button {
+        display: block !important;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 1001;
+    }
+    
+    /* Asegurar que el icono del botón sea visible */
+    .navbar-toggler-icon {
+        display: inline-block !important;
+        width: 1.5em;
+        height: 1.5em;
+        vertical-align: middle;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    
+    /* Menú principal en modo móvil */
+    .main-menu {
+        display: none !important;
+        width: 100%;
+        flex-direction: column;
+        background-color: #f8f9fa;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Cuando está activo debe mostrarse */
+    .main-menu.active {
+        display: flex !important;
+    }
+    
+    /* Asegurarse que los enlaces del menú principal tengan suficiente espacio */
+    .main-menu .nav-item {
+        padding: 12px 15px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+    
+    /* IMPORTANTE: Asegurarse que el botón de CATALOGO sea siempre visible */
+    #productosDropdown {
+        display: inline-flex !important;
+        width: auto;
+        margin-bottom: 0;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    
+    /* Ajustar el menú desplegable para móvil */
     .mega-menu {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 90%;
-        max-width: 350px;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
         max-height: 80vh;
         overflow-y: auto;
         border-radius: 8px;
         box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-        padding: 20px;
+        z-index: 1000;
     }
     
-    /* Oscurecer el fondo cuando se muestra el menú */
-    .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        display: none;
-    }
-    
-    .overlay.active {
-        display: block;
-    }
-    
-    /* Cambiar posición de submenús en móvil */
+    /* Adaptaciones para submenús en móvil */
     .menu-nivel2,
     .menu-nivel3,
     .menu-nivel4,
     .menu-nivel5 {
-        position: static;
-        width: 100%;
-        box-shadow: none;
-        margin-left: 0;
-        padding-left: 15px;
-        margin-top: 5px;
-        margin-bottom: 10px;
+        position: static !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        margin-left: 0 !important;
+        padding-left: 15px !important;
     }
     
-    /* Deshabilitar hover en móvil */
+    /* Para dispositivos móviles, el hover no funciona bien, usamos clases active */
     .has-children:hover > ul {
         display: none;
     }
     
-    /* Mostrar solo los submenús de elementos activos */
     .has-children.active > ul {
-        display: block;
+        display: block !important;
     }
     
-    /* Cambiar flecha para móvil */
-    .has-children > a::after {
-        content: "+";
+    /* Cambiar el contenedor del botón de menú móvil */
+    .navbar-container {
+        position: relative;
     }
-    
-    .has-children.active > a::after {
-        content: "-";
-    }
-    
-    /* Botón de cerrar para móvil */
-    .close-mobile-menu {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: transparent;
-        border: none;
-        font-size: 24px;
-        color: #333;
-        cursor: pointer;
-    }
-}
-
-
-/* Modificar el comportamiento del menú para eliminar las interacciones de hover */
-.productos-dropdown:hover .mega-menu,
-.mega-menu:hover {
-    display: none; /* Desactivar la aparición automática por hover */
-}
-
-/* El menú ahora se controla por JavaScript con display:block/none */
-.mega-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1001;
-}
-
-/* Ajustar submenús para que no dependan del hover */
-.menu-nivel1 > li:hover > .menu-nivel2,
-.menu-nivel2 > li:hover > .menu-nivel3,
-.menu-nivel3 > li:hover > .menu-nivel4,
-.menu-nivel4 > li:hover > .menu-nivel5 {
-    display: block; /* Mantener esto para que los submenús sí aparezcan al hacer hover */
-}
-
-/* Estilos adicionales para mejorar la usabilidad */
-.menu-nivel2,
-.menu-nivel3,
-.menu-nivel4,
-.menu-nivel5 {
-    min-width: 220px;
-}
-
-/* Aumentar el área clickeable */
-.mega-menu a {
-    padding: 10px 15px;
-}
-
-/* Añadir un poco de espacio para facilitar la navegación */
-.has-children {
-    position: relative;
-}
-
-.menu-nivel2,
-.menu-nivel3,
-.menu-nivel4,
-.menu-nivel5 {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    border-radius: 4px;
 }

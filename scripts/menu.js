@@ -17,9 +17,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const mainMenu = document.querySelector('.main-menu');
         
         if (mobileMenuButton && mainMenu) {
+            console.log("Configurando menú móvil desde menu.js");
+            
             mobileMenuButton.addEventListener('click', function(e) {
+                console.log("Click en botón móvil desde menu.js");
+                e.preventDefault();
                 e.stopPropagation();
                 mainMenu.classList.toggle('active');
+                
+                // Asegurarse que el botón de CATALOGO permanezca visible
+                const productosDropdown = document.getElementById('productosDropdown');
+                if (productosDropdown) {
+                    productosDropdown.style.display = 'inline-flex';
+                }
             });
             
             // Cerrar el menú al hacer clic fuera
@@ -28,50 +38,59 @@ document.addEventListener('DOMContentLoaded', function() {
                     mainMenu.classList.remove('active');
                 }
             });
+        } else {
+            console.error("No se encontró el botón de menú móvil o el menú principal");
         }
     };
     
-    // Configurar el menú desplegable de productos con persistencia
+    // Configurar el menú desplegable de productos
     const setupProductosMenu = () => {
         const productosButton = document.querySelector('#productosDropdown');
         const megaMenu = document.querySelector('.mega-menu');
         
         if (productosButton && megaMenu) {
+            console.log("Configurando menú de productos");
+            
             let menuVisible = false;
+            
+            // Función para mostrar/ocultar el menú
+            function toggleMenu(show) {
+                megaMenu.style.display = show ? 'block' : 'none';
+                menuVisible = show;
+            }
             
             // Mostrar menú al hacer clic
             productosButton.addEventListener('click', function(e) {
+                console.log("Click en botón de productos");
                 e.preventDefault();
                 e.stopPropagation();
                 
-                if (menuVisible) {
-                    megaMenu.style.display = 'none';
-                } else {
-                    megaMenu.style.display = 'block';
-                }
+                toggleMenu(!menuVisible);
+            });
+            
+            // En escritorio: También mostrar al pasar el mouse
+            if (window.innerWidth >= 992) {
+                productosButton.addEventListener('mouseenter', function() {
+                    toggleMenu(true);
+                });
                 
-                menuVisible = !menuVisible;
-            });
-            
-            // También mostrar al pasar el mouse (para comodidad)
-            productosButton.addEventListener('mouseenter', function() {
-                megaMenu.style.display = 'block';
-                menuVisible = true;
-            });
-            
-            // Evitar que se cierre al entrar en el megaMenu
-            megaMenu.addEventListener('mouseenter', function() {
-                megaMenu.style.display = 'block';
-                menuVisible = true;
-            });
+                megaMenu.addEventListener('mouseenter', function() {
+                    toggleMenu(true);
+                });
+                
+                megaMenu.addEventListener('mouseleave', function() {
+                    toggleMenu(false);
+                });
+            }
             
             // Cerrar al hacer clic en cualquier parte fuera del menú
             document.addEventListener('click', function(e) {
                 if (!megaMenu.contains(e.target) && e.target !== productosButton) {
-                    megaMenu.style.display = 'none';
-                    menuVisible = false;
+                    toggleMenu(false);
                 }
             });
+        } else {
+            console.error("No se encontró el botón de productos o el mega menú");
         }
     };
 
@@ -106,6 +125,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cargar el menú desde la API
     const cargarMenu = () => {
+        console.log("Cargando menú desde API:", CONFIG.API_URL);
+        
         const startTime = Date.now();
         
         // Crear controller para poder abortar la petición si tarda demasiado
@@ -127,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
+            console.log("Datos recibidos correctamente:", data.length || 0, "categorías");
+            
             const elapsed = Date.now() - startTime;
             // Garantizamos un tiempo mínimo de carga para evitar parpadeos
             const remainingDelay = Math.max(0, CONFIG.LOADING_DELAY - elapsed);
@@ -135,6 +158,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 construirMenu(data);
                 configurarEventos();
                 setupProductosMenu(); // Configurar el menú desplegable después de construirlo
+                
+                // Inicializar los dropdowns de Bootstrap si está disponible
+                if (typeof bootstrap !== 'undefined') {
+                    console.log("Inicializando dropdowns de Bootstrap");
+                    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                    var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
+                        return new bootstrap.Dropdown(dropdownToggleEl);
+                    });
+                }
             }, remainingDelay);
         })
         .catch(error => {
@@ -149,6 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             crearMensajeError(mensaje);
+            
+            // Aún si hay error, configuramos el menú para que funcione con datos de ejemplo
+            setupProductosMenu();
         });
     };
 
@@ -157,6 +192,19 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!menuData || !Array.isArray(menuData) || menuData.length === 0) {
             console.error('Datos del menú inválidos:', menuData);
             crearMensajeError('Los datos del catálogo no son válidos. Contacte al administrador.');
+            
+            // Crear categorías de ejemplo si no hay datos
+            const menuContainer = document.getElementById('listaCategoriasDinamicas');
+            if (menuContainer) {
+                menuContainer.innerHTML = `
+                    <li class="has-children">
+                        <a href="#">Categoría de Ejemplo 1</a>
+                    </li>
+                    <li class="has-children">
+                        <a href="#">Categoría de Ejemplo 2</a>
+                    </li>
+                `;
+            }
             return;
         }
         
@@ -165,6 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Elemento contenedor del menú no encontrado');
             return;
         }
+        
+        console.log("Construyendo menú con", menuData.length, "categorías");
         
         menuContainer.innerHTML = ''; // Limpiar el contenedor
         
@@ -439,19 +489,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+        
+        // En dispositivos móviles, configurar interacción táctil para los submenús
+        if (window.innerWidth < 992) {
+            const hasChildrenLinks = document.querySelectorAll('.has-children > a');
+            
+            hasChildrenLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Si no es un enlace final (item-link)
+                    if (!this.classList.contains('item-link')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const parent = this.parentNode;
+                        const submenu = parent.querySelector('ul');
+                        
+                        if (submenu) {
+                            // Alternar la clase active para mostrar/ocultar el submenú
+                            parent.classList.toggle('active');
+                            
+                            // También ajustar el estilo del submenú
+                            if (parent.classList.contains('active')) {
+                                submenu.style.display = 'block';
+                            } else {
+                                submenu.style.display = 'none';
+                            }
+                        }
+                    }
+                });
+            });
+        }
     }
 
-    // Función para manejar los PDFs
+    // Función para manejar los PDFs y mostrar detalles
     function mostrarDetalle(itemId, itemType, itemText, breadcrumb, pdfRuta) {
         // Si existe un PDF, abrirlo en una nueva pestaña
         if (pdfRuta) {
             window.open(pdfRuta, '_blank');
             return;
         }
+        
+        // Aquí puedes añadir lógica adicional para mostrar detalles si no hay PDF
+        console.log(`Mostrando detalle para: ${itemType} ${itemId} - ${itemText}`);
+        console.log(`Ruta de navegación: ${breadcrumb}`);
     }
 
     // Inicializar funciones
     setupMobileMenu();
     setupSmoothScrolling();
     cargarMenu();
+    
+    // Inicializar el dropdown de Bootstrap si está disponible
+    if (typeof bootstrap !== 'undefined') {
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+        var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
+            return new bootstrap.Dropdown(dropdownToggleEl);
+        });
+    }
+    
+    // Código adicional para dispositivos móviles
+    if (window.innerWidth < 992) {
+        // Asegurar que el botón de CATALOGO sea visible en móvil
+        const productosDropdown = document.getElementById('productosDropdown');
+        if (productosDropdown) {
+            productosDropdown.style.display = 'inline-flex';
+        }
+    }
 });

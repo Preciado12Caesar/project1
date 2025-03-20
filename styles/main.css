@@ -632,3 +632,68 @@ h2, h3, h4, h5, h6 {
         text-align: center;
     }
 }
+/* Estilo para el Libro de Reclamaciones */
+.libro-reclamaciones {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.libro-reclamaciones:hover {
+    opacity: 0.8;
+    color: white;
+}
+
+.libro-svg {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    filter: brightness(0) invert(1); /* Hace que el SVG sea blanco */
+}
+/* Estilos para el libro de reclamaciones */
+.libro-reclamaciones-link {
+    display: inline-block;
+    background-color: rgba(180, 180, 180, 0.3);
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.libro-reclamaciones-img {
+    width: 80px;
+    height: 80px;
+    filter: brightness(0) invert(1);
+}
+
+.libro-reclamaciones-link:hover {
+    background-color: rgba(200, 200, 200, 0.5);
+}
+
+/* Estilos para el copyright centrado */
+.footer-copyright {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-copyright p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Ajustes para el footer en dispositivos móviles */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-logo, .footer-info {
+        margin-bottom: 15px;
+    }
+}
