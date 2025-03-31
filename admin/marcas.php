@@ -1,5 +1,5 @@
 <?php
-// admin/marcas.php - Gestión de marcas
+// admin/marcas.php - Gestión de marcas (VERSIÓN ACTUALIZADA)
 
 // Iniciar sesión
 session_start();
@@ -51,7 +51,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             }
             
             // Eliminar el PDF principal si existe
-            $marca_stmt = $cn->prepare("SELECT pdf_ruta FROM marcas WHERE id_marca = :id");
+            $marca_stmt = $cn->prepare("SELECT pdf_ruta FROM marcas_nueva WHERE id_marca = :id");
             $marca_stmt->bindParam(':id', $id_marca, PDO::PARAM_INT);
             $marca_stmt->execute();
             $marca = $marca_stmt->fetch(PDO::FETCH_ASSOC);
@@ -61,7 +61,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
             }
             
             // Eliminar marca
-            $stmt = $cn->prepare("DELETE FROM marcas WHERE id_marca = :id");
+            $stmt = $cn->prepare("DELETE FROM marcas_nueva WHERE id_marca = :id");
             $stmt->bindParam(':id', $id_marca, PDO::PARAM_INT);
             $stmt->execute();
             
@@ -74,13 +74,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     }
 }
 
-// Obtener listado de marcas con nombre de tipo de maquinaria
+// Obtener listado de marcas con nombre de subcategoría
 try {
-    $stmt = $cn->query("SELECT m.*, t.nombre as tipo_nombre, s.nombre as subcategoria_nombre 
-                        FROM marcas m 
-                        JOIN tipo_maquinaria t ON m.id_tipo_maquinaria = t.id_tipo_maquinaria 
-                        JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria 
-                        ORDER BY t.nombre, m.nombre");
+    $stmt = $cn->query("SELECT m.*, s.nombre as subcategoria_nombre, c.nombre as categoria_nombre 
+                        FROM marcas_nueva m 
+                        JOIN subcategorias s ON m.id_subcategoria = s.id_subcategoria 
+                        JOIN categorias c ON s.id_categoria = c.id_categoria 
+                        ORDER BY s.nombre, m.nombre");
     $marcas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $status_message = "Error al consultar marcas: " . $e->getMessage();
@@ -122,8 +122,8 @@ include 'includes/header.php';
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
-                                <th>Tipo de Maquinaria</th>
                                 <th>Subcategoría</th>
+                                <th>Categoría</th>
                                 <th>Productos</th>
                                 <th>PDF</th>
                                 <th>Acciones</th>
@@ -134,8 +134,8 @@ include 'includes/header.php';
                                 <tr>
                                     <td><?php echo $marca['id_marca']; ?></td>
                                     <td><?php echo htmlspecialchars($marca['nombre']); ?></td>
-                                    <td><?php echo htmlspecialchars($marca['tipo_nombre']); ?></td>
                                     <td><?php echo htmlspecialchars($marca['subcategoria_nombre']); ?></td>
+                                    <td><?php echo htmlspecialchars($marca['categoria_nombre']); ?></td>
                                     <td>
                                         <?php 
                                         // Contar productos
