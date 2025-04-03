@@ -14,8 +14,8 @@
     background-color: white;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    padding: 15px;  /* Padding mayor */
-    min-width: 250px; /* Ancho mínimo mayor */
+    padding: 20px;  /* Padding aumentado */
+    min-width: 300px; /* Ancho mínimo aumentado */
     z-index: 1000;
 }
 
@@ -28,12 +28,12 @@
 .menu-nivel1 > li {
     width: 100%;
     position: relative;
-    margin-bottom: 8px; /* Más espacio entre elementos */
+    margin-bottom: 12px; /* Más espacio entre elementos */
 }
 
 .menu-nivel1 > li > a {
     display: block;
-    padding: 10px 18px; /* Padding mayor */
+    padding: 12px 20px; /* Padding mayor */
     background-color: #f8f9fa;
     color: #333;
     text-decoration: none;
@@ -41,7 +41,7 @@
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
-    font-size: 16px; /* Texto más grande */
+    font-size: 17px; /* Texto más grande */
 }
 
 .menu-nivel1 > li > a:hover {
@@ -75,9 +75,9 @@
     top: 0;
     background-color: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    min-width: 230px;  /* Más ancho */
+    min-width: 250px;  /* Más ancho */
     border-radius: 4px;
-    padding: 10px;     /* Más padding */
+    padding: 15px;     /* Más padding */
     transition: opacity 0.15s ease;
     /* Crear zona de tolerancia para mover el mouse */
     margin-left: -5px; /* Superponer ligeramente */
@@ -95,12 +95,12 @@
 .menu-nivel4 a,
 .menu-nivel5 a {
     display: block;
-    padding: 10px 18px; /* Padding mayor */
+    padding: 12px 20px; /* Padding mayor */
     color: #333;
     text-decoration: none;
     white-space: nowrap;
     border-radius: 4px;
-    font-size: 15px; /* Texto más grande */
+    font-size: 16px; /* Texto más grande */
 }
 
 .menu-nivel2 a:hover,
@@ -115,26 +115,26 @@
     content: "›";
     position: absolute;
     right: 15px; /* Más lejos del borde */
-    font-size: 20px; /* Más grande */
+    font-size: 22px; /* Más grande */
     top: 50%;
     transform: translateY(-50%);
 }
 
 /* Bordes de color para los diferentes tipos */
 .bg-productos {
-    border-left: 4px solid #0d6efd; /* Más grueso */
+    border-left: 5px solid #0d6efd; /* Más grueso */
 }
 
 .bg-servicios {
-    border-left: 4px solid #28a745;
+    border-left: 5px solid #28a745;
 }
 
 .bg-cuchillas {
-    border-left: 4px solid #dc3545;
+    border-left: 5px solid #dc3545;
 }
 
 .bg-tren-rodamiento {
-    border-left: 4px solid #fd7e14;
+    border-left: 5px solid #fd7e14;
 }
 
 /* Íconos de PDF */
@@ -146,7 +146,7 @@
 
 /* BOTÓN DE CATÁLOGO */
 #productosDropdown {
-    padding: 10px 20px;
+    padding: 12px 22px;
     font-size: 16px;
     font-weight: bold;
 }

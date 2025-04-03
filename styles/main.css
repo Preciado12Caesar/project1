@@ -57,6 +57,15 @@ h2, h3, h4, h5, h6 {
     top: 0;
     z-index: 1000;
     padding: 10px 0;
+    width: 100%;
+}
+
+/* Eliminación completa de márgenes para el container dentro del site-header */
+.site-header .container {
+    margin: 0 !important;
+    padding: 0 15px;
+    width: 100%;
+    max-width: 100%;
 }
 
 .logo-container {
@@ -74,6 +83,7 @@ h2, h3, h4, h5, h6 {
     align-items: center;
     padding-top: 10px;
     border-top: 1px solid #eee;
+    width: 100%;
 }
 
 /* Estilos para PRODUCTOS */
@@ -574,6 +584,10 @@ h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 768px) {
+    .site-header .container {
+        padding: 0 10px; /* Reducimos ligeramente el padding en dispositivos más pequeños */
+    }
+    
     .carousel-item img {
         max-height: none !important; /* Elimina la restricción de altura en móviles */
     }
@@ -632,6 +646,7 @@ h2, h3, h4, h5, h6 {
         text-align: center;
     }
 }
+
 /* Estilo para el Libro de Reclamaciones */
 .libro-reclamaciones {
     display: flex;
@@ -653,6 +668,7 @@ h2, h3, h4, h5, h6 {
     margin-right: 10px;
     filter: brightness(0) invert(1); /* Hace que el SVG sea blanco */
 }
+
 /* Estilos para el libro de reclamaciones */
 .libro-reclamaciones-link {
     display: inline-block;
